@@ -1,0 +1,166 @@
+<mxfile host="app.diagrams.net" modified="2025-08-25T07:45:00Z" agent="GPT-5 Thinking" version="22.0.8" type="device">
+  <diagram id="cab-arch-01" name="Cab Service Architecture">
+    <mxGraphModel dx="1280" dy="720" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        
+        <!-- Boundary / Cluster -->
+        <mxCell id="cluster" value="Cab-Service Cloud / K8s Cluster" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;dashed=0;fillColor=#f5f5f5;strokeColor=#666;" vertex="1" parent="1">
+          <mxGeometry x="260" y="60" width="1480" height="900" as="geometry"/>
+        </mxCell>
+
+        <!-- User -->
+        <mxCell id="user" value="User (Rider App / Driver App / Web)" style="shape=mxgraph.basic.user;html=1;whiteSpace=wrap;strokeColor=#1a73e8;fillColor=#e8f0fe;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="270" width="180" height="120" as="geometry"/>
+        </mxCell>
+
+        <!-- API Gateway -->
+        <mxCell id="apigw" value="API Gateway / Load Balancer" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#1a73e8;fillColor=#ffffff;strokeWidth=2;" vertex="1" parent="cluster">
+          <mxGeometry x="40" y="220" width="260" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- Auth Service -->
+        <mxCell id="authsvc" value="Auth Service&#10;/login, /signup&#10;Generates JWT" style="shape=process;rounded=1;whiteSpace=wrap;html=1;strokeColor=#34a853;fillColor=#e6f4ea;" vertex="1" parent="cluster">
+          <mxGeometry x="360" y="140" width="260" height="100" as="geometry"/>
+        </mxCell>
+
+        <!-- Riders Service -->
+        <mxCell id="riderssvc" value="Riders Service&#10;/riders/signup, /riders/login, /riders/{id}&#10;Profile / KYC" style="shape=process;rounded=1;whiteSpace=wrap;html=1;strokeColor=#34a853;fillColor=#e6f4ea;" vertex="1" parent="cluster">
+          <mxGeometry x="360" y="270" width="300" height="110" as="geometry"/>
+        </mxCell>
+
+        <!-- Logging Service -->
+        <mxCell id="logsvc" value="Logging / Location Service&#10;/coords/save, /coords/{id}, /coords&#10;Upserts GPS pings" style="shape=process;rounded=1;whiteSpace=wrap;html=1;strokeColor=#34a853;fillColor=#e6f4ea;" vertex="1" parent="cluster">
+          <mxGeometry x="360" y="430" width="320" height="120" as="geometry"/>
+        </mxCell>
+
+        <!-- Trip Service (optional but common) -->
+        <mxCell id="tripsvc" value="Trip Service&#10;/trips/create, /trips/{id}, /trips/eta&#10;Matching &amp; status" style="shape=process;rounded=1;whiteSpace=wrap;html=1;strokeColor=#34a853;fillColor=#e6f4ea;" vertex="1" parent="cluster">
+          <mxGeometry x="360" y="590" width="320" height="120" as="geometry"/>
+        </mxCell>
+
+        <!-- Notification Service -->
+        <mxCell id="notisvc" value="Notification Service&#10;Push/SMS/Email" style="shape=process;rounded=1;whiteSpace=wrap;html=1;strokeColor=#fb8c00;fillColor=#fff3e0;" vertex="1" parent="cluster">
+          <mxGeometry x="760" y="740" width="260" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- Message Broker -->
+        <mxCell id="broker" value="RabbitMQ / Kafka&#10;Queues: location_updates, notifications" style="shape=mxgraph.flowchart.data;rounded=1;whiteSpace=wrap;html=1;strokeColor=#fbbc04;fillColor=#fff7e6;strokeWidth=2;" vertex="1" parent="cluster">
+          <mxGeometry x="760" y="480" width="260" height="110" as="geometry"/>
+        </mxCell>
+
+        <!-- DBs -->
+        <mxCell id="postgres" value="PostgreSQL&#10;Users, Riders, Drivers" style="shape=mxgraph.basic.cylinder;html=1;whiteSpace=wrap;strokeColor=#5f6368;fillColor=#e8eaed;rounded=1;" vertex="1" parent="cluster">
+          <mxGeometry x="760" y="220" width="180" height="110" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="mongodb" value="MongoDB&#10;Coordinates (TTL), Telemetry" style="shape=mxgraph.basic.cylinder;html=1;whiteSpace=wrap;strokeColor=#5f6368;fillColor=#e8eaed;rounded=1;" vertex="1" parent="cluster">
+          <mxGeometry x="760" y="360" width="200" height="110" as="geometry"/>
+        </mxCell>
+
+        <!-- Object Storage (media) -->
+        <mxCell id="objstore" value="Object Storage (S3/GCS)&#10;Receipts, avatars, logs" style="shape=mxgraph.flowchart.data;rounded=1;whiteSpace=wrap;html=1;strokeColor=#5f6368;fillColor=#eef3ff;" vertex="1" parent="cluster">
+          <mxGeometry x="1080" y="360" width="220" height="100" as="geometry"/>
+        </mxCell>
+
+        <!-- Admin Dashboard -->
+        <mxCell id="admin" value="Ops/Admin Dashboard" style="shape=process;rounded=1;whiteSpace=wrap;html=1;strokeColor=#1a73e8;fillColor=#ffffff;" vertex="1" parent="cluster">
+          <mxGeometry x="1080" y="200" width="220" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- Converter/Worker (from reference flow) -->
+        <mxCell id="worker" value="Background Workers&#10;ETAs, Geo-aggregation, Cleanups" style="shape=process;rounded=1;whiteSpace=wrap;html=1;strokeColor=#9c27b0;fillColor=#f3e5f5;" vertex="1" parent="cluster">
+          <mxGeometry x="1080" y="500" width="260" height="100" as="geometry"/>
+        </mxCell>
+
+        <!-- Edges: User -> API GW -->
+        <mxCell id="e_user_apigw" style="endArrow=block;endFill=1;strokeWidth=2;" edge="1" parent="1" source="user" target="apigw">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_apigw_auth" value="/login, /signup" style="endArrow=block;endFill=1;" edge="1" parent="cluster" source="apigw" target="authsvc">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_apigw_riders" value="JWT" style="endArrow=block;endFill=1;" edge="1" parent="cluster" source="apigw" target="riderssvc">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_apigw_log" value="/coords/* (JWT)" style="endArrow=block;endFill=1;" edge="1" parent="cluster" source="apigw" target="logsvc">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_apigw_trip" value="/trips/* (JWT)" style="endArrow=block;endFill=1;" edge="1" parent="cluster" source="apigw" target="tripsvc">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Auth -> Postgres -->
+        <mxCell id="e_auth_pg" value="Users, Credentials" style="endArrow=block;endFill=1;dashed=0;" edge="1" parent="cluster" source="authsvc" target="postgres">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Riders -> Postgres -->
+        <mxCell id="e_riders_pg" value="CRUD" style="endArrow=block;endFill=1;" edge="1" parent="cluster" source="riderssvc" target="postgres">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Logging -> Mongo -->
+        <mxCell id="e_log_mongo" value="GPS pings" style="endArrow=block;endFill=1;" edge="1" parent="cluster" source="logsvc" target="mongodb">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Trip -> Broker -->
+        <mxCell id="e_trip_broker" value="emit: trip_created, driver_assigned" style="endArrow=block;endFill=1;" edge="1" parent="cluster" source="tripsvc" target="broker">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Logging -> Broker (location updates) -->
+        <mxCell id="e_log_broker" value="publish: location_updates" style="endArrow=block;endFill=1;" edge="1" parent="cluster" source="logsvc" target="broker">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Broker -> Notification -->
+        <mxCell id="e_broker_noti" value="notifications" style="endArrow=block;endFill=1;" edge="1" parent="cluster" source="broker" target="notisvc">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Broker -> Worker -->
+        <mxCell id="e_broker_worker" value="async jobs" style="endArrow=block;endFill=1;" edge="1" parent="cluster" source="broker" target="worker">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Worker -> Mongo (aggregations) -->
+        <mxCell id="e_worker_mongo" value="aggregate heatmaps" style="endArrow=block;endFill=1;dashed=1;" edge="1" parent="cluster" source="worker" target="mongodb">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Worker -> Object Storage -->
+        <mxCell id="e_worker_obj" value="store reports/receipts" style="endArrow=block;endFill=1;dashed=1;" edge="1" parent="cluster" source="worker" target="objstore">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Admin Dashboard Consumers -->
+        <mxCell id="e_admin_pg" style="endArrow=block;endFill=1;dashed=1;" edge="1" parent="cluster" source="admin" target="postgres">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_admin_mongo" style="endArrow=block;endFill=1;dashed=1;" edge="1" parent="cluster" source="admin" target="mongodb">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_admin_broker" style="endArrow=block;endFill=1;dashed=1;" edge="1" parent="cluster" source="admin" target="broker">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- API GW back notifications to user -->
+        <mxCell id="e_noti_user" value="Push / SMS / Email" style="endArrow=block;endFill=1;strokeColor=#fb8c00;" edge="1" parent="cluster" source="notisvc" target="apigw">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_apigw_user" value="Notifications" style="endArrow=block;endFill=1;strokeColor=#fb8c00;" edge="1" parent="1" source="apigw" target="user">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Legends -->
+        <mxCell id="legend" value="Legend:&#10;Green = Microservices&#10;Grey = Datastores&#10;Orange = Messaging/Notifications&#10;Purple = Workers&#10;Blue = Edge / Clients" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#bdbdbd;" vertex="1" parent="cluster">
+          <mxGeometry x="1340" y="740" width="360" height="160" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
