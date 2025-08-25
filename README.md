@@ -13,5 +13,5 @@ Designed and implemented scalable microservices as part of a Cab Aggregator Plat
 
 # Architecture
 <p align="center">
-  <img src="./Project documentation/Microservices-Breakdown.png" width="600" title="Architecture" alt="Architecture">
+  <img src="./Project documentation/cab-service-architecture.png" width="600" title="Architecture" alt="Architecture">
   </p>
